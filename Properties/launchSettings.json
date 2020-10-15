@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "filter_value": {
+      "commandName": "Project",
+      "commandLineArgs": "-r redis"
+    }
+  }
+}
