@@ -1,20 +1,27 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using Neo.IronLua;
 using Newtonsoft.Json;
 
 namespace filter_value.datasource
 {
     public static class help
-    {
+    { 
+        public static string[] Split(string text, char symbol = ' ', char trim = ' ')
+        {
+            var value = text?.Split(symbol).Select(x => x.Trim(trim)).ToArray();
+            return value;
+        }
+
         public static void save(string data, string fileName = "main.txt")
         {
-            StreamWriter writer = new StreamWriter(Environment.CurrentDirectory + "//" + fileName, append: true);
+            StreamWriter writer = new StreamWriter(Environment.CurrentDirectory + "/" + fileName, append: true);
             writer.WriteLine(data);
             writer.Close();
         }
 
-        /// <summary>
+        /// <summary>   
         /// 用户对象转json
         /// </summary>
         /// <param name="obj"></param>
@@ -22,7 +29,7 @@ namespace filter_value.datasource
         public static string Serialize(this object obj)
         {
             return JsonConvert.SerializeObject(obj);
-        } 
+        }
 
         /// <summary>
         /// luaTable转json
@@ -32,7 +39,7 @@ namespace filter_value.datasource
         public static string ToJson(this LuaTable obj)
         {
             return LuaTable.ToJson(obj);
-        } 
+        }
 
         /// <summary>
         /// 字符串转序列化

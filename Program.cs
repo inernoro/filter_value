@@ -8,17 +8,16 @@ namespace filter_value
 {
     public class Program
     {
-
         static void Main(string[] args)
-        { 
+        {
             //加载配置项
             GetConfig.PerformBadly();
 
             Args = args;
             var execute = GetSource();
             var lua = new Lua();
-            LuaGlobal env = lua.CreateEnvironment();
-            var file = Environment.CurrentDirectory + "\\script\\main.lua";
+            var env = lua.CreateEnvironment();
+            var file = Environment.CurrentDirectory + "/script/main.lua";
             env.DoChunk(file);
             dynamic en = env;
             execute(en);
@@ -26,7 +25,6 @@ namespace filter_value
 
         public static Action<dynamic> GetSource()
         {
-            
             var conf = find_value("-r", "cmd");
             Action<dynamic> func = null;
             switch (conf)
@@ -46,8 +44,5 @@ namespace filter_value
             }
             return func;
         }
-
-
-
     }
 }

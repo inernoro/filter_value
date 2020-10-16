@@ -1,28 +1,18 @@
-﻿ --[[
-
-[redis]
---redishost 127.0.0.1
---redispwd =  
---redisdb=0
-
-help
-save() 保存到文件
-
-]]
-
-local redislua = {};
+﻿local redislua = {};
 
 local help = clr.filter_value.datasource.help;
 local redis = clr.filter_value.datasource.redis.Redis;
 local redis_helper = clr.filter_value.datasource.redis.RedisHelper;
- 
+local redis_server_helper = clr.filter_value.datasource.redis.RedisServerHelper;
+local config = clr.filter_value.com.GetConfig;
 
- function stringGet( key ) 
+
+
+function stringGet( key ) 
 	local value = redis.StringGet(key);  
 	redislua.analysis(value);
 	return value;
 end
-
 
 function listGet( key )
 	local value = redis.ListRange(key,0,-1);
@@ -31,6 +21,7 @@ function listGet( key )
 	end 
 	return value;
 end
+
 
 function sortedSet( key )
 	local value = redis.SortedSetRangeByScore(key);
@@ -43,7 +34,8 @@ end
 
 -- 获取key列表
 redislua.input = function () 
-	return redis_helper.Scanner("*smallactivity_rescordtop_key_*");
+	local db = config.Get("redis_database");
+	return redis_server_helper.Keys(tonumber(db),"*smallactivity_rescordtop_key_*");
 end
 
 --分析代码
@@ -55,9 +47,6 @@ end
 --执行器,支持异步
 redislua.exec = function (input)  
     local key_type = redis.KeyType(input);
-	--[[if(key_type~='String')then
-		return;
-	end ]]
 	local switch = {
 		SortedSet = sortedSet,
 		List = listGet,

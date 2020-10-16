@@ -7,10 +7,8 @@ using StackExchange.Redis;
 
 namespace filter_value.datasource.redis
 {
-    class Redis
+    public class Redis
     {
-
-
         public static Task<RedisValue> DebugObjectAsync(string key)
         {
             return RedisHelper.DebugObjectAsync(key);
